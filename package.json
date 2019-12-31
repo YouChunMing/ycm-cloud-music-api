@@ -10,8 +10,8 @@
   "scripts": {
     "clean": "rimraf dist coverage types",
     "format": "prettier --write \"{src,test}/**/*.{js,ts}\" index.d.ts \"**/*.md\"",
-    "lint": "eslint --ext js,ts src test",
-    "test": "jest",
+    "lint": "eslint --no-error-on-unmatched-pattern --ext js,ts src test",
+    "test": "jest --passWithNoTests",
     "build": "rollup -c"
   },
   "devDependencies": {
