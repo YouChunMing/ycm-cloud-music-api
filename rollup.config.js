@@ -1,4 +1,4 @@
-//import builtins from 'rollup-plugin-node-builtins'; // 插件，向bundle中加入内建模块代码
+import builtins from 'rollup-plugin-node-builtins'; // 插件，向bundle中加入内建模块代码
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import globals from 'rollup-plugin-node-globals';
@@ -15,18 +15,15 @@ export default [
             file: pkg.browser,
             format: 'umd',
             name: 'cloudMusicApi',
-            // globals: {
-            //     immutable: 'Immutable',
-            //     redux: 'Redux'
-            // },
             exports:'named',
         },
-        // external: ['redux', 'immutable'],
         plugins: [
-            // builtins({
-            //     crypto: true
-            // }),
-            resolve(),
+            builtins({
+                crypto: true
+            }),
+            resolve({
+                browser: true,
+            }),
             commonjs(),
             globals(),
             babel({
@@ -37,10 +34,6 @@ export default [
                 dest: "dist",
                 filename: 'index.html',
                 inject:'head',
-                // externals: [
-                //     { type: 'js', file: "node_modules/redux/dist/redux.js", pos: 'before' },
-                //     { type: 'js', file: "node_modules/immutable/dist/immutable.js", pos: 'before' }
-                // ],
                 ignore: /(\.cjs\.js)|(\.esm\.js)$/i
             })
         ]
@@ -51,7 +44,7 @@ export default [
             { file: pkg.main, format: 'cjs', exports:'named'},
             { file: pkg.module, format: 'esm' }
         ],
-        external: [],
+        external: ['axios', 'normalizr', 'uuid/v3', 'core-js/modules/es.promise'],
         plugins: [
             commonjs(),
             babel({

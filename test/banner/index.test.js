@@ -1,25 +1,29 @@
-import {getHomeData} from '../../src/banner/index';
+import { getHomeData } from "../../src/banner/index";
+import HTTPClient from "../../src/httpClient";
 
-describe('banner api', () => {
+jest.mock("../../src/httpClient");
 
-    it('async getHomeData() should be right', async () => {
+describe("banner api", () => {
+  it("get banner home data successfully", async () => {
+    const mockedData = require("./banner.json");
 
-        try{
-            const {status, data: {banners}}  = await getHomeData();
-            expect(status).toBe(200);
-            expect(banners).toBeInstanceOf(Array);
-            const expectedItem = expect.objectContaining({
-              imageUrl: expect.any(String),
-              targetType: expect.any(Number),
-              typeTitle: expect.any(String)
-            });
-            banners.forEach((item) => {
-              expect(item).toEqual(expectedItem);
-            });
-        }catch(error){
-            
-        }
-    
+    HTTPClient.get.mockImplementationOnce((url, config) => {
+      return Promise.resolve({
+        data: mockedData
+      });
     });
 
+    const { data } = await getHomeData();
+
+    expect(data).toEqual(
+      expect.objectContaining({
+        entities: expect.any(Object),
+        result: expect.any(Array)
+      })
+    );
+
+    data.result.forEach((item, index) => {
+      expect(data.entities.banners[item]).toEqual(mockedData.banners[index]);
+    });
+  });
 });
