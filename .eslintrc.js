@@ -16,6 +16,6 @@ module.exports = {
     },
     "rules": {
         "no-empty": ["error", { "allowEmptyCatch": true }],
-        "no-unused-vars": ["error", { "varsIgnorePattern": "^(Map)|(List)$" }]
+        "no-unused-vars": ["error", { "varsIgnorePattern": "^(Map)|(List)$", "args": "none" }]
     }
 };
