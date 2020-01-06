@@ -44,7 +44,12 @@ export default [
             { file: pkg.main, format: 'cjs', exports:'named'},
             { file: pkg.module, format: 'esm' }
         ],
-        external: ['axios', 'normalizr', 'uuid/v3', 'core-js/modules/es.promise'],
+        external: (id) => {
+            const specificList = ['axios', 'normalizr', 'uuid/v3'];
+            const specificPattern = new RegExp(`^(${specificList.join('|')})($|/)`);
+            const externalPattern = new RegExp(`^core-js/modules`);
+            return specificPattern.test(id) || externalPattern.test(id);
+        },
         plugins: [
             commonjs(),
             babel({
