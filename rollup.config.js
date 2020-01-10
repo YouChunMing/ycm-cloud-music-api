@@ -1,40 +1,61 @@
-import builtins from 'rollup-plugin-node-builtins'; // 插件，向bundle中加入内建模块代码
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
-import globals from 'rollup-plugin-node-globals';
 import babel from 'rollup-plugin-babel';
-import html from 'rollup-plugin-bundle-html';
-//import builtinsModules from 'builtin-modules';  // builtinsModules是一个内建模块名组成的数组对象，用于cjs,esm中
+import replace from 'rollup-plugin-replace';
+import { terser } from 'rollup-plugin-terser';
+
 import pkg from './package.json';
 
-
 export default [
+    // UMD Development
     {
         input: 'src/index.js',
         output: {
-            file: pkg.browser,
+            file: "umd/ycm-cloud-music-api.js",
             format: 'umd',
-            name: 'cloudMusicApi',
+            name: 'YCMcloudMusicApi',
             exports:'named',
         },
         plugins: [
-            builtins({
-                crypto: true
-            }),
             resolve({
                 browser: true,
             }),
             commonjs(),
-            globals(),
             babel({
                 exclude: 'node_modules/**' 
             }),
-            html({
-                template: 'template/index.html',
-                dest: "dist",
-                filename: 'index.html',
-                inject:'head',
-                ignore: /(\.cjs\.js)|(\.esm\.js)$/i
+            replace({
+                'process.env.NODE_ENV': JSON.stringify('development')
+            })
+        ]
+    },
+    // UMD Production
+    {
+        input: 'src/index.js',
+        output: {
+            file: "umd/ycm-cloud-music-api.min.js",
+            format: 'umd',
+            name: 'YCMcloudMusicApi',
+            exports:'named',
+        },
+        plugins: [
+            resolve({
+                browser: true,
+            }),
+            commonjs(),
+            babel({
+                exclude: 'node_modules/**' 
+            }),
+            replace({
+                'process.env.NODE_ENV': JSON.stringify('production')
+            }),
+            terser({
+                compress: {
+                  pure_getters: true,
+                  unsafe: true,
+                  unsafe_comps: true,
+                  warnings: false
+                }
             })
         ]
     },
