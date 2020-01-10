@@ -1,6 +1,6 @@
 {
   "name": "ycm-cloud-music-api",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "main": "cjs/ycm-cloud-music-api.js",
   "module": "es/ycm-cloud-music-api.js",
   "unpkg": "umd/ycm-cloud-music-api.js",
