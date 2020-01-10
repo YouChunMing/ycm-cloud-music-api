@@ -37,7 +37,9 @@
     "uuid": "^3.3.3"
   },
   "files": [
-    "dist/*.js",
+    "umd",
+    "es",
+    "cjs",
     "src"
   ]
 }
